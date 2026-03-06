@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#071510">
+<title>Discover The Natural Method</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --lime:   #b5f23d;
+    --mint:   #3dffc0;
+    --teal:   #0d9b72;
+    --dark:   #071510;
+    --glass:  rgba(255,255,255,0.07);
+    --border: rgba(255,255,255,0.10);
+    --text:   #e8f5f0;
+    --muted:  rgba(232,245,240,0.55);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* BG */
+  .bg-canvas {
+    position: fixed; inset: 0; z-index: 0; overflow: hidden;
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, #0d3d2a 0%, transparent 70%),
+                radial-gradient(ellipse 60% 50% at 90% 80%, #0a2d1f 0%, transparent 60%),
+                linear-gradient(160deg, #071510 0%, #0b1e17 50%, #061209 100%);
+  }
+  .bg-canvas::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 20% 20%, rgba(181,242,61,0.06) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 80%, rgba(61,255,192,0.05) 0%, transparent 50%);
+    animation: bgPulse 8s ease-in-out infinite alternate;
+  }
+  @keyframes bgPulse { from{opacity:0.6;transform:scale(1)} to{opacity:1;transform:scale(1.05)} }
+
+  .orb {
+    position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0;
+    animation: floatOrb linear infinite;
+  }
+  .orb-1 { width:280px;height:280px;background:rgba(13,155,114,0.18);top:-80px;left:-80px;animation-duration:18s; }
+  .orb-2 { width:200px;height:200px;background:rgba(181,242,61,0.12);bottom:10%;right:-60px;animation-duration:22s;animation-delay:-7s; }
+  .orb-3 { width:150px;height:150px;background:rgba(61,255,192,0.10);top:40%;left:50%;animation-duration:15s;animation-delay:-3s; }
+  @keyframes floatOrb {
+    0%{transform:translate(0,0) rotate(0deg)} 33%{transform:translate(20px,-20px) rotate(120deg)}
+    66%{transform:translate(-15px,15px) rotate(240deg)} 100%{transform:translate(0,0) rotate(360deg)}
+  }
+
+  body::after {
+    content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size:180px 180px; opacity:0.35;
+  }
+
+  .page { position:relative; z-index:2; max-width:480px; margin:0 auto; padding:0 20px 140px; }
+
+  /* HERO */
+  .hero {
+    min-height:100svh; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center; padding:60px 0 50px; position:relative;
+  }
+
+  .badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(181,242,61,0.10); border:1px solid rgba(181,242,61,0.25);
+    border-radius:100px; padding:6px 16px; margin-bottom:28px;
+    font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--lime); backdrop-filter:blur(8px);
+    animation:fadeSlideDown 0.8s cubic-bezier(.16,1,.3,1) both;
+  }
+  .badge-dot { width:6px;height:6px;border-radius:50%;background:var(--lime);animation:blink 2s ease-in-out infinite; }
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+  h1 {
+    font-family:'Syne',sans-serif;
+    font-size:clamp(38px,11vw,54px);
+    font-weight:800; line-height:1.06; letter-spacing:-0.02em;
+    background:linear-gradient(135deg, #e8f5f0 0%, var(--mint) 50%, var(--lime) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    margin-bottom:20px;
+    animation:fadeSlideUp 0.9s cubic-bezier(.16,1,.3,1) 0.1s both;
+  }
+
+  .sub {
+    font-size:16px; font-weight:300; color:var(--muted);
+    line-height:1.65; max-width:300px; margin:0 auto 36px;
+    animation:fadeSlideUp 0.9s cubic-bezier(.16,1,.3,1) 0.25s both;
+  }
+
+  /* CTA BUTTON */
+  .cta-wrap {
+    position:relative; width:100%; max-width:320px;
+    animation:fadeSlideUp 0.9s cubic-bezier(.16,1,.3,1) 0.4s both;
+  }
+  .cta-btn {
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    position:relative; overflow:hidden;
+    background:linear-gradient(135deg, #b5f23d 0%, #3dffc0 100%);
+    color:#071510; font-family:'Syne',sans-serif;
+    font-size:17px; font-weight:800; letter-spacing:0.01em;
+    text-decoration:none; border:none; cursor:pointer;
+    border-radius:100px; padding:18px 32px;
+    box-shadow:0 0 40px rgba(181,242,61,0.35), 0 8px 32px rgba(0,0,0,0.4);
+    transition:transform 0.18s ease, box-shadow 0.18s ease;
+    -webkit-tap-highlight-color:transparent;
+    width:100%;
+  }
+  .cta-btn::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg,rgba(255,255,255,0.28),transparent);
+    border-radius:inherit; opacity:0; transition:opacity 0.3s ease;
+  }
+  .cta-btn:active { transform:scale(0.97); box-shadow:0 0 18px rgba(181,242,61,0.2),0 4px 14px rgba(0,0,0,0.4); }
+  .cta-btn:hover::before { opacity:1; }
+
+  .cta-arrow {
+    width:22px;height:22px;background:rgba(7,21,16,0.22);
+    border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    animation:arrowPulse 2s ease-in-out infinite;
+  }
+  @keyframes arrowPulse{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
+
+  .cta-pulse {
+    position:absolute;inset:-4px;border-radius:100px;
+    background:linear-gradient(135deg,rgba(181,242,61,0.4),rgba(61,255,192,0.3));
+    animation:ringPulse 2.5s ease-in-out infinite; z-index:-1;
+  }
+  @keyframes ringPulse{0%,100%{transform:scale(1);opacity:0.7}50%{transform:scale(1.07);opacity:0}}
+
+  .hero-note { margin-top:14px;font-size:12px;color:var(--muted);animation:fadeSlideUp 0.9s ease 0.55s both; }
+
+  .social-proof {
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    margin-top:22px;font-size:12px;color:var(--muted);
+    animation:fadeSlideUp 0.9s ease 0.7s both; opacity:0;
+  }
+  .stars{color:var(--lime);letter-spacing:1px;font-size:13px;}
+  .avatars{display:flex;}
+  .avatar {
+    width:24px;height:24px;border-radius:50%;
+    border:2px solid var(--dark);margin-left:-6px;
+    background:linear-gradient(135deg,var(--teal),var(--mint));
+    font-size:10px;display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:var(--dark);
+  }
+  .avatar:first-child{margin-left:0;}
+
+  .scroll-hint {
+    position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    animation:fadeSlideUp 1s ease 1.2s both;
+  }
+  .scroll-hint span{font-size:10px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;}
+  .scroll-chevron{animation:chevBounce 2s ease-in-out infinite;}
+  @keyframes chevBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+  /* DIVIDER */
+  .divider { height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:52px 0; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size:10px;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--lime);font-weight:500;text-align:center;margin-bottom:28px;
+  }
+
+  /* BENEFITS */
+  .benefit-card {
+    background:var(--glass);border:1px solid var(--border);
+    border-radius:20px;padding:22px 22px;
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    display:flex;align-items:center;gap:18px;margin-bottom:14px;
+    box-shadow:0 4px 24px rgba(0,0,0,0.2),inset 0 1px 0 rgba(255,255,255,0.06);
+    opacity:0;transform:translateY(24px);
+    transition:transform 0.5s cubic-bezier(.16,1,.3,1),opacity 0.5s ease;
+  }
+  .benefit-card.visible{opacity:1;transform:translateY(0);}
+
+  .benefit-icon {
+    width:52px;height:52px;border-radius:16px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:24px;
+  }
+  .icon-a{background:linear-gradient(135deg,rgba(181,242,61,0.2),rgba(181,242,61,0.05));}
+  .icon-b{background:linear-gradient(135deg,rgba(61,255,192,0.2),rgba(61,255,192,0.05));}
+  .icon-c{background:linear-gradient(135deg,rgba(13,155,114,0.25),rgba(13,155,114,0.07));}
+
+  .benefit-text h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;}
+  .benefit-text p{font-size:13px;color:var(--muted);line-height:1.55;font-weight:300;}
+
+  /* CURIOSITY */
+  .curiosity-box {
+    background:linear-gradient(135deg,rgba(181,242,61,0.05),rgba(61,255,192,0.04));
+    border:1px solid rgba(181,242,61,0.15);
+    border-radius:24px;padding:32px 26px;
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    text-align:center;
+    box-shadow:0 8px 40px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.05);
+    opacity:0;transform:translateY(24px);
+    transition:opacity 0.6s ease,transform 0.6s cubic-bezier(.16,1,.3,1);
+  }
+  .curiosity-box.visible{opacity:1;transform:translateY(0);}
+  .curiosity-box h2 {
+    font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
+    letter-spacing:-0.02em;line-height:1.25;margin-bottom:20px;
+    background:linear-gradient(135deg,#e8f5f0 30%,var(--lime));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  }
+  .curiosity-box p{font-size:14px;font-weight:300;color:var(--muted);line-height:1.7;margin-bottom:14px;}
+  .curiosity-box p:last-of-type{margin-bottom:0;}
+  .curiosity-box strong{color:var(--text);font-weight:500;-webkit-text-fill-color:initial;}
+  .curiosity-accent{color:var(--lime);font-weight:500;font-size:15px;-webkit-text-fill-color:initial!important;}
+
+  /* FINAL CTA */
+  .final-cta {
+    padding:40px 0 20px;text-align:center;
+    opacity:0;transform:translateY(24px);
+    transition:opacity 0.6s ease,transform 0.6s cubic-bezier(.16,1,.3,1);
+  }
+  .final-cta.visible{opacity:1;transform:translateY(0);}
+  .final-cta h2 {
+    font-family:'Syne',sans-serif;font-size:28px;font-weight:800;
+    letter-spacing:-0.02em;line-height:1.2;margin-bottom:10px;
+    background:linear-gradient(135deg,#e8f5f0,var(--mint));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  }
+  .final-cta .sub2{font-size:14px;color:var(--muted);margin-bottom:28px;font-weight:300;}
+
+  /* STICKY */
+  .sticky-bar {
+    position:fixed;bottom:0;left:0;right:0;z-index:100;
+    padding:16px 20px max(28px, env(safe-area-inset-bottom, 28px));
+    background:linear-gradient(to top,rgba(7,21,16,0.98) 60%,transparent);
+    display:flex;justify-content:center;
+    transform:translateY(100%);transition:transform 0.4s cubic-bezier(.16,1,.3,1);
+  }
+  .sticky-bar.shown{transform:translateY(0);}
+
+  /* KEYFRAMES */
+  @keyframes fadeSlideDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeSlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes ripple{to{transform:scale(1);opacity:0}}
+
+  @media(max-height:700px){.hero{min-height:auto;padding:80px 0 50px;}}
+
+  /* LANGUAGE SWITCHER */
+  .lang-bar {
+    position:fixed;top:16px;right:16px;z-index:200;
+    display:flex;gap:6px;
+  }
+  .lang-btn {
+    background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+    border-radius:100px;padding:6px 13px;
+    font-size:12px;font-weight:500;color:var(--muted);
+    cursor:pointer;backdrop-filter:blur(10px);
+    transition:background 0.2s,color 0.2s,border-color 0.2s;
+    -webkit-tap-highlight-color:transparent;
+    font-family:'DM Sans',sans-serif;
+  }
+  .lang-btn.active {
+    background:rgba(181,242,61,0.15);border-color:rgba(181,242,61,0.4);color:var(--lime);
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-canvas"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- Language Switcher -->
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" onclick="setLang('hi')">HI</button>
+  <button class="lang-btn" onclick="setLang('ru')">RU</button>
+</div>
+
+<!-- Sticky CTA -->
+<div class="sticky-bar" id="stickyBar">
+  <a class="cta-btn" href="https://7b13b4mmpocv6kc1tg0ny--eol.hop.clickbank.net/?&traffic_source=instagram&traffic_type=warm&campaign=cb_citrus_fb01&creative=video2&ad=ad1&extclid=fb1111">
+    <div class="cta-pulse"></div>
+    <span data-i18n="cta1">Discover The Method</span>
+    <div class="cta-arrow">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5H8M8 5L5.5 2.5M8 5L5.5 7.5" stroke="#071510" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </a>
+</div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge"><span class="badge-dot"></span> <span data-i18n="badge">Natural &amp; Science-Backed</span></div>
+
+    <h1 data-i18n-html="h1">Burn Fat.<br>Feel Alive.<br>Every Day.</h1>
+
+    <p class="sub" data-i18n="sub">Thousands quietly discovered a morning ritual that changes everything. Your body already knows how.</p>
+
+    <div class="cta-wrap">
+      <a class="cta-btn" href="https://7b13b4mmpocv6kc1tg0ny--eol.hop.clickbank.net/?&traffic_source=instagram&traffic_type=warm&campaign=cb_citrus_fb01&creative=video2&ad=ad1&extclid=fb1111" id="heroCta">
+        <div class="cta-pulse"></div>
+        <span data-i18n="cta1">Discover The Method</span>
+        <div class="cta-arrow">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5H8M8 5L5.5 2.5M8 5L5.5 7.5" stroke="#071510" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </a>
+    </div>
+
+    <p class="hero-note" data-i18n="heroNote">Free to access · No credit card required</p>
+
+    <div class="social-proof">
+      <div class="avatars">
+        <div class="avatar">A</div><div class="avatar">M</div>
+        <div class="avatar">J</div><div class="avatar">K</div>
+      </div>
+      <span class="stars">★★★★★</span>
+      <span data-i18n="social">12,400+ started this week</span>
+    </div>
+
+    <div class="scroll-hint">
+      <span data-i18n="scroll">Scroll</span>
+      <div class="scroll-chevron">
+        <svg width="14" height="8" viewBox="0 0 14 8" fill="none"><path d="M1 1L7 7L13 1" stroke="rgba(232,245,240,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- BENEFITS -->
+  <section>
+    <div class="section-label" data-i18n="whyLabel">Why it works</div>
+
+    <div class="benefit-card" data-reveal>
+      <div class="benefit-icon icon-a">⚡</div>
+      <div class="benefit-text">
+        <h3 data-i18n="b1t">Natural Energy Support</h3>
+        <p data-i18n="b1p">Wake up charged — no caffeine crashes or afternoon slumps.</p>
+      </div>
+    </div>
+
+    <div class="benefit-card" data-reveal style="transition-delay:0.1s">
+      <div class="benefit-icon icon-b">🔥</div>
+      <div class="benefit-text">
+        <h3 data-i18n="b2t">Boosts Your Metabolism</h3>
+        <p data-i18n="b2p">Helps your body work smarter and burn fat from the inside out.</p>
+      </div>
+    </div>
+
+    <div class="benefit-card" data-reveal style="transition-delay:0.2s">
+      <div class="benefit-icon icon-c">🌿</div>
+      <div class="benefit-text">
+        <h3 data-i18n="b3t">Simple Daily Routine</h3>
+        <p data-i18n="b3p">Under 60 seconds. No gym. No diet. Just one small habit.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CURIOSITY -->
+  <section>
+    <div class="curiosity-box" data-reveal>
+      <h2 data-i18n="cqH">Why are so many people quietly keeping this to themselves?</h2>
+      <p data-i18n-html="cqP1">It's not a diet. Not a pill. Not exercise.<br><strong>It's something far simpler</strong> — and that's exactly why most people overlook it.</p>
+      <p data-i18n-html="cqP2">Ancient cultures used this approach for centuries. Now, modern research is finally catching up to explain <strong>why it works so well.</strong></p>
+      <p data-i18n="cqP3">The results speak for themselves: energy, clarity, a body that finally feels in sync.</p>
+      <p class="curiosity-accent" data-i18n="cqP4">Are you curious enough to find out what it is?</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta" data-reveal>
+    <h2 data-i18n="finalH">Ready to feel the difference?</h2>
+    <p class="sub2" data-i18n="finalP">One click. No commitment. Just answers.</p>
+    <div style="display:flex;justify-content:center;">
+      <div style="position:relative;width:100%;max-width:320px;">
+        <a class="cta-btn" href="https://7b13b4mmpocv6kc1tg0ny--eol.hop.clickbank.net/?&traffic_source=instagram&traffic_type=warm&campaign=cb_citrus_fb01&creative=video2&ad=ad1&extclid=fb1111">
+          <div class="cta-pulse"></div>
+          <span data-i18n="cta2">Start Now — It's Free</span>
+          <div class="cta-arrow">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5H8M8 5L5.5 2.5M8 5L5.5 7.5" stroke="#071510" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </a>
+      </div>
+    </div>
+    <p style="margin-top:16px;font-size:11px;color:var(--muted);" data-i18n="disclaimer">Individual results may vary. This page contains affiliate links.</p>
+  </section>
+
+</div>
+
+<script>
+  // ── TRANSLATIONS ──
+  const T = {
+    en: {
+      badge:    "Natural & Science-Backed",
+      h1:       "Burn Fat.<br>Feel Alive.<br>Every Day.",
+      sub:      "Thousands quietly discovered a morning ritual that changes everything. Your body already knows how.",
+      cta1:     "Discover The Method",
+      cta2:     "Start Now — It's Free",
+      heroNote: "Free to access · No credit card required",
+      social:   "12,400+ started this week",
+      scroll:   "Scroll",
+      whyLabel: "Why it works",
+      b1t: "Natural Energy Support",
+      b1p: "Wake up charged — no caffeine crashes or afternoon slumps.",
+      b2t: "Boosts Your Metabolism",
+      b2p: "Helps your body work smarter and burn fat from the inside out.",
+      b3t: "Simple Daily Routine",
+      b3p: "Under 60 seconds. No gym. No diet. Just one small habit.",
+      cqH:  "Why are so many people quietly keeping this to themselves?",
+      cqP1: "It's not a diet. Not a pill. Not exercise.<br><strong>It's something far simpler</strong> — and that's exactly why most people overlook it.",
+      cqP2: "Ancient cultures used this approach for centuries. Now, modern research is finally catching up to explain <strong>why it works so well.</strong>",
+      cqP3: "The results speak for themselves: energy, clarity, a body that finally feels in sync.",
+      cqP4: "Are you curious enough to find out what it is?",
+      finalH: "Ready to feel the difference?",
+      finalP: "One click. No commitment. Just answers.",
+      disclaimer: "Individual results may vary. This page contains affiliate links."
+    },
+    hi: {
+      badge:    "प्राकृतिक और विज्ञान-समर्थित",
+      h1:       "चर्बी जलाएं।<br>जीवंत महसूस करें।<br>हर दिन।",
+      sub:      "हजारों लोगों ने चुपचाप एक सुबह की रस्म खोजी जो सब कुछ बदल देती है। आपका शरीर पहले से ही जानता है।",
+      cta1:     "तरीका खोजें",
+      cta2:     "अभी शुरू करें — मुफ़्त है",
+      heroNote: "मुफ़्त पहुँच · कोई क्रेडिट कार्ड नहीं",
+      social:   "इस सप्ताह 12,400+ लोगों ने शुरू किया",
+      scroll:   "स्क्रॉल करें",
+      whyLabel: "यह क्यों काम करता है",
+      b1t: "प्राकृतिक ऊर्जा समर्थन",
+      b1p: "चार्ज होकर उठें — कोई कैफीन क्रैश या थकान नहीं।",
+      b2t: "मेटाबॉलिज्म को बढ़ाता है",
+      b2p: "आपके शरीर को अंदर से चर्बी जलाने में मदद करता है।",
+      b3t: "सरल दैनिक दिनचर्या",
+      b3p: "60 सेकंड से कम। कोई जिम नहीं। बस एक छोटी आदत।",
+      cqH:  "इतने लोग इसे चुपचाप अपने तक क्यों रखते हैं?",
+      cqP1: "यह कोई डाइट नहीं है। कोई गोली नहीं। कोई व्यायाम नहीं।<br><strong>यह कहीं अधिक सरल है</strong> — और इसीलिए अधिकतर लोग इसे नजरअंदाज करते हैं।",
+      cqP2: "प्राचीन संस्कृतियों ने इस दृष्टिकोण का उपयोग सदियों से किया। अब, आधुनिक अनुसंधान <strong>यह समझाने लगा है कि यह इतना प्रभावी क्यों है।</strong>",
+      cqP3: "परिणाम खुद बोलते हैं: ऊर्जा, स्पष्टता, एक शरीर जो अंततः संतुलन में लगता है।",
+      cqP4: "क्या आप जानने के लिए पर्याप्त जिज्ञासु हैं?",
+      finalH: "फर्क महसूस करने के लिए तैयार हैं?",
+      finalP: "एक क्लिक। कोई प्रतिबद्धता नहीं। बस जवाब।",
+      disclaimer: "व्यक्तिगत परिणाम भिन्न हो सकते हैं। इस पेज में एफिलिएट लिंक हैं।"
+    },
+    ru: {
+      badge:    "Натуральный и научно обоснованный",
+      h1:       "Сжигай жир.<br>Чувствуй жизнь.<br>Каждый день.",
+      sub:      "Тысячи людей тихо открыли утренний ритуал, который меняет всё. Ваше тело уже знает как.",
+      cta1:     "Узнать метод",
+      cta2:     "Начать сейчас — бесплатно",
+      heroNote: "Бесплатный доступ · Карта не нужна",
+      social:   "12 400+ начали на этой неделе",
+      scroll:   "Листать",
+      whyLabel: "Почему это работает",
+      b1t: "Естественная поддержка энергии",
+      b1p: "Просыпайтесь заряженными — без упадка сил и кофеиновых сбоев.",
+      b2t: "Ускоряет обмен веществ",
+      b2p: "Помогает телу работать умнее и сжигать жир изнутри.",
+      b3t: "Простая ежедневная привычка",
+      b3p: "Менее 60 секунд. Без зала. Без диеты. Одна маленькая привычка.",
+      cqH:  "Почему так много людей тихо держат это при себе?",
+      cqP1: "Это не диета. Не таблетка. Не упражнения.<br><strong>Всё гораздо проще</strong> — и именно поэтому большинство людей упускают это.",
+      cqP2: "Древние культуры использовали этот подход веками. Теперь современная наука наконец объясняет, <strong>почему это так хорошо работает.</strong>",
+      cqP3: "Результаты говорят сами за себя: энергия, ясность, тело, которое наконец в гармонии.",
+      cqP4: "Достаточно ли вам любопытно, чтобы узнать что это?",
+      finalH: "Готовы почувствовать разницу?",
+      finalP: "Один клик. Никаких обязательств. Только ответы.",
+      disclaimer: "Индивидуальные результаты могут отличаться. Страница содержит партнёрские ссылки."
+    }
+  };
+
+  function setLang(lang) {
+    const d = T[lang];
+    // update text nodes
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      if (d[el.dataset.i18n] !== undefined) el.textContent = d[el.dataset.i18n];
+    });
+    // update html nodes (allow <br> and <strong>)
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      if (d[el.dataset.i18nHtml] !== undefined) el.innerHTML = d[el.dataset.i18nHtml];
+    });
+    // active button highlight
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+    // update html lang attr
+    document.documentElement.lang = lang;
+  }
+
+  // ── Scroll reveal ──
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);} });
+  }, {threshold:0.15});
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+
+  // ── Sticky bar ──
+  const stickyBar = document.getElementById('stickyBar');
+  const heroObserver = new IntersectionObserver(([e]) => {
+    stickyBar.classList.toggle('shown', !e.isIntersecting);
+  }, {threshold:0});
+  heroObserver.observe(document.getElementById('heroCta'));
+
+  // ── Ripple effect ──
+  document.querySelectorAll('.cta-btn').forEach(btn => {
+    btn.addEventListener('pointerdown', function(e) {
+      const r = document.createElement('span');
+      const rect = this.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height) * 1.5;
+      Object.assign(r.style, {
+        position:'absolute', borderRadius:'50%', background:'rgba(255,255,255,0.18)',
+        width:size+'px', height:size+'px',
+        left:(e.clientX-rect.left-size/2)+'px', top:(e.clientY-rect.top-size/2)+'px',
+        transform:'scale(0)', animation:'ripple 0.55s ease-out forwards', pointerEvents:'none'
+      });
+      this.appendChild(r);
+      setTimeout(()=>r.remove(), 600);
+    });
+  });
+</script>
+</body>
+</html>
